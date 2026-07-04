@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const redirectUrl = chrome.identity.getRedirectURL();
-    const authUrl = \`https://github.com/login/oauth/authorize?client_id=\${CONFIG.CLIENT_ID}&redirect_uri=\${encodeURIComponent(redirectUrl)}&scope=repo\`;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${CONFIG.CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUrl)}&scope=repo`;
 
     chrome.identity.launchWebAuthFlow({
       url: authUrl,
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.access_token) {
         // Fetch user data
         const userRes = await fetch('https://api.github.com/user', {
-          headers: { 'Authorization': \`token \${data.access_token}\` }
+          headers: { 'Authorization': `token ${data.access_token}` }
         });
         const userData = await userRes.json();
 
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const response = await fetch('https://api.github.com/user/repos?sort=updated&per_page=100', {
-        headers: { 'Authorization': \`token \${token}\` }
+        headers: { 'Authorization': `token ${token}` }
       });
       const repos = await response.json();
       
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedRepo = repoSelect.value;
     if (selectedRepo) {
       chrome.storage.local.set({ githubRepo: selectedRepo }, () => {
-        showStatus(\`Linked to \${selectedRepo}\`, 'success');
+        showStatus(`Linked to ${selectedRepo}`, 'success');
       });
     }
   });
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entry.className = 'log-entry';
       const time = new Date(log.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
       const statusColor = log.status === 'Success' ? 'green' : 'red';
-      entry.innerHTML = \`<strong>\${time}</strong> - <span style="color:\${statusColor}">\${log.status}</span>: \${log.message}\`;
+      entry.innerHTML = `<strong>${time}</strong> - <span style="color:${statusColor}">${log.status}</span>: ${log.message}`;
       logsContainer.appendChild(entry);
     });
   }
