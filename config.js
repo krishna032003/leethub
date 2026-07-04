@@ -1,0 +1,6 @@
+// config.js
+// YOU MUST FILL THESE IN FROM GITHUB DEVELOPER SETTINGS
+export const CONFIG = {
+  CLIENT_ID: "Ov23lit6ieZpkZWlZSrJ",
+  CLIENT_SECRET: "a0562e223d1d7c0bd5ca519eba10b24ef4db1144"
+};

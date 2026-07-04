@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "LeetHub Sync",
   "version": "2.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh9KH7N8gWrLXF49uQMXB5XgfDGChd+UOAumQGaC4CFhW1vBL2ElxSeDt0PQjwRt+26RfshaXanmJ7fXHo9X/tBIZ4fXQFpk6vAZx1yYOxn7VhSPTlnD+oORng9544tIqedHnnr9JQpSmCZ7cUZuHUU+jqYWsFc6jzvIqD54+zD35X/o0ORTDO56uu8a1SNnv9C8v+aPXKiNRmxaI0gCa8vjPgFU1eqXQcmus8FZtJ704Mzcmwbv64NGBfGLIkfEpVirjb4q/qK1mRYTXeZ0e0NH0W8b0l9ESXOE8FdJhSPJlhv+aBthSDbMyM++elKDRKt206aD3J6dCfjbt5TEp3QIDAQAB",
   "description": "Automatically sync your LeetCode accepted submissions to GitHub via OAuth.",
   "permissions": ["storage", "identity"],
   "host_permissions": [
