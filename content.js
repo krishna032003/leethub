@@ -39,7 +39,11 @@ window.addEventListener('LEETCODE_ACCEPTED', async (e) => {
       questionId: details.question.questionId,
       questionTitle: details.question.title,
       lang: details.lang.name,
-      code: details.code
+      code: details.code,
+      runtimeDisplay: details.runtimeDisplay,
+      memoryDisplay: details.memoryDisplay,
+      runtimePercentile: details.runtimePercentile,
+      memoryPercentile: details.memoryPercentile
     };
     
     // Send to background script to sync to GitHub
@@ -52,10 +56,14 @@ window.addEventListener('LEETCODE_ACCEPTED', async (e) => {
 });
 
 async function getSubmissionDetails(submissionId) {
-  const query = \`
+  const query = `
     query submissionDetails($submissionId: Int!) {
       submissionDetails(submissionId: $submissionId) {
         code
+        runtimeDisplay
+        memoryDisplay
+        runtimePercentile
+        memoryPercentile
         lang {
           name
         }
@@ -66,7 +74,7 @@ async function getSubmissionDetails(submissionId) {
         }
       }
     }
-  \`;
+  `;
   
   const response = await fetch('https://leetcode.com/graphql', {
     method: 'POST',

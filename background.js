@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 async function handleSubmission(data) {
-  const { titleSlug, questionId, questionTitle, lang, code } = data;
+  const { titleSlug, questionId, questionTitle, lang, code, runtimeDisplay, memoryDisplay, runtimePercentile, memoryPercentile } = data;
   
   const result = await chrome.storage.local.get(['githubToken', 'githubRepo', 'syncLogs']);
   const token = result.githubToken;
@@ -33,23 +33,30 @@ async function handleSubmission(data) {
   const timestamp = new Date();
   const timeStr = timestamp.toISOString().replace(/[:.]/g, '-').slice(0, 19);
   
-  // We will push to two paths: latest and submissions/
   const latestPath = `${dirName}/latest.${ext}`;
   const historyPath = `${dirName}/submissions/${timeStr}.${ext}`;
   
-  const commitMsg = `Add solution for ${questionTitle} (${lang})`;
+  const rtP = runtimePercentile ? runtimePercentile.toFixed(2) : '0.00';
+  const memP = memoryPercentile ? memoryPercentile.toFixed(2) : '0.00';
+  const commitMsg = `Add solution for ${questionTitle} (${lang}) - Time: ${runtimeDisplay} (${rtP}%), Space: ${memoryDisplay} (${memP}%)`;
+
+  let commentPrefix = '//';
+  if (['python', 'python3', 'ruby'].includes(lang)) commentPrefix = '#';
+  else if (['sql', 'mysql', 'oracle'].includes(lang)) commentPrefix = '--';
+
+  const finalCode = `${commentPrefix} Time: ${runtimeDisplay} (${rtP}%)\n${commentPrefix} Space: ${memoryDisplay} (${memP}%)\n\n${code}`;
 
   try {
     // 1. Check if latest file exists to get its SHA (needed for updating)
     let latestSha = await getFileSha(token, repo, latestPath);
     
     // 2. Upload latest file
-    await uploadFile(token, repo, latestPath, code, commitMsg, latestSha);
+    await uploadFile(token, repo, latestPath, finalCode, commitMsg, latestSha);
     
     // 3. Upload history file (never exists, so no SHA needed)
-    await uploadFile(token, repo, historyPath, code, commitMsg);
+    await uploadFile(token, repo, historyPath, finalCode, commitMsg);
 
-    logSync(result.syncLogs, 'Success', `Synced ${questionTitle} (${lang})`);
+    logSync(result.syncLogs, 'Success', `Synced ${questionTitle} - ${runtimeDisplay} | ${memoryDisplay}`);
   } catch (error) {
     logSync(result.syncLogs, 'Error', error.message);
     throw error;
